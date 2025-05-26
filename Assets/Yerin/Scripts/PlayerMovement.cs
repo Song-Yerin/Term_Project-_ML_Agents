@@ -11,12 +11,12 @@ public class PlayerMovement : MonoBehaviour
     public GameObject skillEffectPrefab;
     public float effectDelay = 0.5f;
     public float effectOffsetY = 0.1f;
-    public float attackDuration = 0.5f;   // ÆòÅ¸ Áö¼Ó ½Ã°£
-    public float skillDuration = 1f;      // ½ºÅ³ Áö¼Ó ½Ã°£
+    public float attackDuration = 0.5f;   // í‰íƒ€ ì§€ì† ì‹œê°„
+    public float skillDuration = 1f;      // ìŠ¤í‚¬ ì§€ì† ì‹œê°„
 
-    public GameObject projectilePrefab;  // VÅ° Åõ»çÃ¼ ÇÁ¸®ÆÕ
-    public float projectileSpeed = 10f;  // Åõ»çÃ¼ ¼Óµµ
-    public GameObject dashEffectPrefab;  // ´ë½Ã ÀÜ»ó ÀÌÆåÆ® ÇÁ¸®ÆÕ
+    public GameObject projectilePrefab;  // Ví‚¤ íˆ¬ì‚¬ì²´ í”„ë¦¬íŒ¹
+    public float projectileSpeed = 10f;  // íˆ¬ì‚¬ì²´ ì†ë„
+    public GameObject dashEffectPrefab;  // ëŒ€ì‹œ ì”ìƒ ì´í™íŠ¸ í”„ë¦¬íŒ¹
 
     private Rigidbody rb;
     private Animator animator;
@@ -71,11 +71,11 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleActions()
     {
-        // ÆòÅ¸ (ZÅ°)
+        // í‰íƒ€ (Zí‚¤)
         if (Input.GetKeyDown(KeyCode.Z))
         {
             animator.SetBool("isAttacking", true);
-            Debug.Log("ÆòÅ¸ ½ÃÀÛ!");
+            Debug.Log("í‰íƒ€ ì‹œì‘!");
             StartCoroutine(ResetState("isAttacking", attackDuration));
         }
 
@@ -84,34 +84,34 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("isAttacking", false);
         }
 
-        // °¡µå (XÅ°)
+        // ê°€ë“œ (Xí‚¤)
         if (Input.GetKey(KeyCode.X))
         {
             animator.SetBool("isGuarding", true);
-            Debug.Log("°¡µå Áß!");
+            Debug.Log("ê°€ë“œ ì¤‘!");
         }
         else
         {
             animator.SetBool("isGuarding", false);
         }
 
-        // ÁÂ¿ì È¸ÇÇ (Q/EÅ°)
+        // ì¢Œìš° íšŒí”¼ (Q/Eí‚¤)
         if (Input.GetKeyDown(KeyCode.Q) && canDodge)
         {
             StartCoroutine(Dodge(Vector3.left));
-            CreateDashEffect();  // Q È¸ÇÇ ½Ã ÀÜ»ó »ı¼º
+            CreateDashEffect();  // Q íšŒí”¼ ì‹œ ì”ìƒ ìƒì„±
         }
         else if (Input.GetKeyDown(KeyCode.E) && canDodge)
         {
             StartCoroutine(Dodge(Vector3.right));
-            CreateDashEffect();  // E È¸ÇÇ ½Ã ÀÜ»ó »ı¼º
+            CreateDashEffect();  // E íšŒí”¼ ì‹œ ì”ìƒ ìƒì„±
         }
 
-        // ½ºÅ³ (CÅ°)
+        // ìŠ¤í‚¬ (Cí‚¤)
         if (Input.GetKeyDown(KeyCode.C))
         {
             animator.SetBool("isSkill", true);
-            Debug.Log("½ºÅ³ ½ÃÀÛ!");
+            Debug.Log("ìŠ¤í‚¬ ì‹œì‘!");
             StartCoroutine(DelayedSkillEffect());
             StartCoroutine(ResetState("isSkill", skillDuration));
         }
@@ -120,7 +120,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("isSkill", false);
         }
 
-        // Åõ»çÃ¼ ½ºÅ³ (V)
+        // íˆ¬ì‚¬ì²´ ìŠ¤í‚¬ (V)
         if (Input.GetKeyDown(KeyCode.V))
         {
             animator.SetBool("isSkill2", true);
@@ -147,7 +147,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         rb.MovePosition(dodgeTarget);
-        Debug.Log("È¸ÇÇ ¿Ï·á!");
+        Debug.Log("íšŒí”¼ ì™„ë£Œ!");
 
         yield return new WaitForSeconds(dodgeCooldown);
         canDodge = true;
@@ -158,16 +158,16 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(effectDelay);
 
         Vector3 forward = transform.forward;
-        Vector3 right = transform.right;  //  ÇÃ·¹ÀÌ¾îÀÇ ¿À¸¥ÂÊ ¹æÇâ (xÃà)
+        Vector3 right = transform.right;  //  í”Œë ˆì´ì–´ì˜ ì˜¤ë¥¸ìª½ ë°©í–¥ (xì¶•)
 
-        // YÃà ±âÁØ +90µµ È¸ÀüµÈ ¹æÇâ
+        // Yì¶• ê¸°ì¤€ +90ë„ íšŒì „ëœ ë°©í–¥
         Vector3 rotatedDirection = Quaternion.Euler(0, -90, 0) * forward;
 
-        // Ãß°¡ ÀÌµ¿ °Å¸®
-        float forwardOffset = 1.0f;  // ¾ÕÀ¸·Î ³ª°¥ °Å¸®
-        float rightOffset = 1.0f;    // ¿À¸¥ÂÊÀ¸·Î ÀÌµ¿ (À½¼ö¸é ¿ŞÂÊ)
+        // ì¶”ê°€ ì´ë™ ê±°ë¦¬
+        float forwardOffset = 1.0f;  // ì•ìœ¼ë¡œ ë‚˜ê°ˆ ê±°ë¦¬
+        float rightOffset = 1.0f;    // ì˜¤ë¥¸ìª½ìœ¼ë¡œ ì´ë™ (ìŒìˆ˜ë©´ ì™¼ìª½)
 
-        // À§Ä¡ °è»ê
+        // ìœ„ì¹˜ ê³„ì‚°
         Vector3 effectPosition = rb.position
                                 + rotatedDirection * 1.0f
                                 + forward * forwardOffset
@@ -184,27 +184,27 @@ public class PlayerMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(duration);
         animator.SetBool(stateName, false);
-        Debug.Log($"{stateName} Á¾·á");
+        Debug.Log($"{stateName} ì¢…ë£Œ");
     }
 
     void ShootProjectile()
     {
-        // ÇÃ·¹ÀÌ¾î À§Ä¡ + ¾à°£ ¾ÕÂÊ(¶Ç´Â ¿øÇÏ´Â ¹æÇâ) À§Ä¡ °è»ê
+        // í”Œë ˆì´ì–´ ìœ„ì¹˜ + ì•½ê°„ ì•ìª½(ë˜ëŠ” ì›í•˜ëŠ” ë°©í–¥) ìœ„ì¹˜ ê³„ì‚°
         Vector3 spawnPos = transform.position + transform.forward * 1.0f + Vector3.up * 0.5f;
 
-        // ¿ÀºêÁ§Æ® »ı¼º
+        // ì˜¤ë¸Œì íŠ¸ ìƒì„±
         GameObject proj = Instantiate(projectilePrefab, spawnPos, Quaternion.LookRotation(transform.forward));
 
-        // Rigidbody ÀÌµ¿ Ã³¸®
+        // Rigidbody ì´ë™ ì²˜ë¦¬
         Rigidbody rb = proj.GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.useGravity = false;  // ÇÊ¿ä½Ã
-            rb.velocity = transform.forward * projectileSpeed;  // ¾Õ ¹æÇâÀ¸·Î ÀÌµ¿
+            rb.useGravity = false;  // í•„ìš”ì‹œ
+            rb.velocity = transform.forward * projectileSpeed;  // ì• ë°©í–¥ìœ¼ë¡œ ì´ë™
         }
         else
         {
-            Debug.LogWarning("Projectile¿¡ Rigidbody°¡ ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("Projectileì— Rigidbodyê°€ ì—†ìŠµë‹ˆë‹¤.");
         }
 
     } 
@@ -212,6 +212,6 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 effectPosition = rb.position + Vector3.up * effectOffsetY;
         Instantiate(dashEffectPrefab, effectPosition, Quaternion.identity);
-        Debug.Log("´ë½Ã ÀÜ»ó ÀÌÆåÆ® »ı¼º");
+        Debug.Log("ëŒ€ì‹œ ì”ìƒ ì´í™íŠ¸ ìƒì„±");
     }
 }
