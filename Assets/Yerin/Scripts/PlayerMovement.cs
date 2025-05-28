@@ -23,9 +23,17 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 movement;
     private bool canDodge = true;
 
+    public AudioClip attackSoundClip;    // (Z) 사운드
+    public AudioClip skillSoundClip;     // (C) 사운드
+    public AudioClip projectileSoundClip; // (V) 사운드
+    public AudioClip fbx; // C 발생 사운드
+    public AudioClip projectile; // V 발생 사운드
+    private AudioSource audioSource;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
     }
 
@@ -76,6 +84,7 @@ public class PlayerMovement : MonoBehaviour
         {
             animator.SetBool("isAttacking", true);
             Debug.Log("평타 시작!");
+            audioSource.PlayOneShot(attackSoundClip);
             StartCoroutine(ResetState("isAttacking", attackDuration));
         }
 
@@ -112,6 +121,7 @@ public class PlayerMovement : MonoBehaviour
         {
             animator.SetBool("isSkill", true);
             Debug.Log("스킬 시작!");
+            audioSource.PlayOneShot(skillSoundClip);
             StartCoroutine(DelayedSkillEffect());
             StartCoroutine(ResetState("isSkill", skillDuration));
         }
@@ -124,6 +134,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.V))
         {
             animator.SetBool("isSkill2", true);
+            audioSource.PlayOneShot(projectileSoundClip);
             ShootProjectile();
         }
         else
@@ -177,6 +188,8 @@ public class PlayerMovement : MonoBehaviour
 
         Quaternion effectRotation = Quaternion.LookRotation(rotatedDirection, Vector3.up);
 
+        audioSource.PlayOneShot(fbx);
+
         Instantiate(skillEffectPrefab, effectPosition, effectRotation);
     }
 
@@ -195,6 +208,7 @@ public class PlayerMovement : MonoBehaviour
         // 오브젝트 생성
         GameObject proj = Instantiate(projectilePrefab, spawnPos, Quaternion.LookRotation(transform.forward));
 
+
         // Rigidbody 이동 처리
         Rigidbody rb = proj.GetComponent<Rigidbody>();
         if (rb != null)
@@ -206,6 +220,8 @@ public class PlayerMovement : MonoBehaviour
         {
             Debug.LogWarning("Projectile에 Rigidbody가 없습니다.");
         }
+
+        audioSource.PlayOneShot(projectile);
 
     } 
     void CreateDashEffect()

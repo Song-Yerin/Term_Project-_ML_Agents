@@ -8,8 +8,8 @@ NativeFormatImporter:
   assetBundleVariant: 
 AssetOrigin:
   serializedVersion: 1
-  productId: 302316
-  packageName: Brawler Animations
-  packageVersion: 1.0
-  assetPath: Assets/Brawler Animations/Models/Armature/Materials/M_Armature_Legs.mat
-  uploadId: 707875
+  productId: 299378
+  packageName: Martial Art Animations - Sample
+  packageVersion: 1.0.1
+  assetPath: Assets/Brawler Animations Sample/Models/Armature/Materials/M_Armature_Legs.mat
+  uploadId: 748292
