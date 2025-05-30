@@ -1,12 +1,5 @@
 fileFormatVersion: 2
 guid: e73adacd5e8f6fc45a491dbd62e71ead
-AssetOrigin:
-  serializedVersion: 1
-  productId: 302316
-  packageName: Brawler Animations
-  packageVersion: 1.0
-  assetPath: Assets/Brawler Animations/Models/Armature/Textures/Armature_Body_MetallicSmoothness.tif
-  uploadId: 707875
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -135,3 +128,10 @@ TextureImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 299378
+  packageName: Martial Art Animations - Sample
+  packageVersion: 1.0.1
+  assetPath: Assets/Brawler Animations Sample/Models/Armature/Textures/Armature_Body_MetallicSmoothness.tif
+  uploadId: 748292

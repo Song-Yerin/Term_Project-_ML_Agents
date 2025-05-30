@@ -1,14 +1,25 @@
 using UnityEngine;
-using System.Collections;
 using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;
+    public float dodgeDistance = 3f;
+    public float dodgeCooldown = 1f;
+
+    public GameObject skillEffectPrefab;
+    public float effectDelay = 0.5f;
+    public float effectOffsetY = 0.1f;
+    public float attackDuration = 0.5f;   // 평타 지속 시간
+    public float skillDuration = 1f;      // 스킬 지속 시간
+
+    public GameObject projectilePrefab;  // V키 투사체 프리팹
+    public float projectileSpeed = 10f;  // 투사체 속도
+    public GameObject dashEffectPrefab;  // 대시 잔상 이펙트 프리팹
+
     private Rigidbody rb;
     private Animator animator;
-
     private Vector3 movement;
     private bool canDodge = true;
 
@@ -19,23 +30,22 @@ public class PlayerMovement : MonoBehaviour
     public AudioClip projectile; // V 발생 사운드
     private AudioSource audioSource;
 
-    public GameObject attackHitbox; // RightHand 등
-
-
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
+        float h = Input.GetAxisRaw("Vertical"); 
+        float v = Input.GetAxisRaw("Horizontal");
 
         movement = new Vector3(h, 0f, v).normalized;
 
         UpdateAnimation(h, v);
+        HandleActions();
     }
 
     void FixedUpdate()
@@ -47,11 +57,7 @@ public class PlayerMovement : MonoBehaviour
     {
         bool up = false, down = false, left = false, right = false;
 
-        if (h == 0 && v == 0)
-        {
-            // �ƹ� �͵� ������ �ʾ��� �� �� ��� ���� false
-        }
-        else
+        if (h != 0 || v != 0)
         {
             if (Mathf.Abs(h) > Mathf.Abs(v))
             {
@@ -65,7 +71,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        // Animator Bool �Ķ���� ����
         animator.SetBool("Move_Up", up);
         animator.SetBool("Move_Down", down);
         animator.SetBool("Move_Left", left);
@@ -80,7 +85,6 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("isAttacking", true);
             Debug.Log("평타 시작!");
             audioSource.PlayOneShot(attackSoundClip);
-            StartCoroutine(ActivateHitboxTemporarily()); // 히트박스 켜기
             StartCoroutine(ResetState("isAttacking", attackDuration));
         }
 
@@ -225,12 +229,5 @@ public class PlayerMovement : MonoBehaviour
         Vector3 effectPosition = rb.position + Vector3.up * effectOffsetY;
         Instantiate(dashEffectPrefab, effectPosition, Quaternion.identity);
         Debug.Log("대시 잔상 이펙트 생성");
-    }
-
-    IEnumerator ActivateHitboxTemporarily()
-    {
-        attackHitbox.SetActive(true);
-        yield return new WaitForSeconds(attackDuration); // 예: 0.5초
-        attackHitbox.SetActive(false);
     }
 }
