@@ -1,9 +1,13 @@
 using UnityEngine;
+using UnityEngine.UI;
 using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour
 {
+    public GameObject gladHPBar; 
+    private HealthBarGlad gladHP;
+
     public float moveSpeed = 5f;
     public float dodgeDistance = 3f;
     public float dodgeCooldown = 1f;
@@ -35,6 +39,11 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
+
+        if (gladHPBar != null)
+        {
+            gladHP = gladHPBar.GetComponentInChildren<HealthBarGlad>();
+        }
     }
 
     void Update()
@@ -85,6 +94,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("isAttacking", true);
             Debug.Log("평타 시작!");
             audioSource.PlayOneShot(attackSoundClip);
+            gladHP.TakeDamage(1); // 데미지 10
             StartCoroutine(ResetState("isAttacking", attackDuration));
         }
 
@@ -122,6 +132,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("isSkill", true);
             Debug.Log("스킬 시작!");
             audioSource.PlayOneShot(skillSoundClip);
+            gladHP.TakeDamage(2);;
             StartCoroutine(DelayedSkillEffect());
             StartCoroutine(ResetState("isSkill", skillDuration));
         }
@@ -135,6 +146,7 @@ public class PlayerMovement : MonoBehaviour
         {
             animator.SetBool("isSkill2", true);
             audioSource.PlayOneShot(projectileSoundClip);
+            gladHP.TakeDamage(25f);
             ShootProjectile();
         }
         else
@@ -215,6 +227,9 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.useGravity = false;  // 필요시
             rb.velocity = transform.forward * projectileSpeed;  // 앞 방향으로 이동
+
+            ProjectileDamage damageScript = proj.AddComponent<ProjectileDamage>();
+            damageScript.damage = 15f;
         }
         else
         {
@@ -230,4 +245,25 @@ public class PlayerMovement : MonoBehaviour
         Instantiate(dashEffectPrefab, effectPosition, Quaternion.identity);
         Debug.Log("대시 잔상 이펙트 생성");
     }
+    // 공격 범위 안의 적 찾기 (예시: 평타용)
+    void TryDamageEnemy(float damage)
+    {
+        float attackRange = 2.0f;
+        Collider[] hits = Physics.OverlapSphere(transform.position + transform.forward, attackRange);
+
+        foreach (Collider hit in hits)
+        {
+            if (hit.CompareTag("Glad"))
+            {
+                HealthBar hp = hit.GetComponentInChildren<HealthBar>(); // filled_hp에 연결된 컴포넌트
+                if (hp != null)
+                {
+                    hp.TakeDamage(damage);
+                    Debug.Log("데미지 입힘!");
+                }
+            }
+        }
+    }
+
 }
+
