@@ -6,7 +6,7 @@ public class ProjectileDamage : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Glad"))
+        if (other.CompareTag("2P"))
         {
             HealthBar hp = other.GetComponentInChildren<HealthBar>();
             if (hp != null)

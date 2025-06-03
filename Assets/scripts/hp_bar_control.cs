@@ -3,25 +3,14 @@ using UnityEngine.UI;
 
 public class HealthBarcontrol : MonoBehaviour
 {
+    public GameManager gameManager;
     public Image fillImage;           // 초록색 체력바 이미지
-    public float maxHealth = 100f;
-    private float currentHealth;
+    public int maxHealth = 100;
+    public bool amI1p = true;
 
-    void Start()
+    void Update()
     {
-        currentHealth = maxHealth;
-        UpdateBar();
-    }
-
-    public void TakeDamage(float damage)
-    {
-        currentHealth -= damage;
-        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
-        UpdateBar();
-    }
-
-    void UpdateBar()
-    {
-        fillImage.fillAmount = currentHealth / maxHealth;
+        int currentHealth = amI1p ? gameManager.p1HP : gameManager.p2HP;
+        fillImage.fillAmount = (float)currentHealth / (float)maxHealth;
     }
 }

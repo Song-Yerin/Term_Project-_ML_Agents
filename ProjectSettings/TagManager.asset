@@ -4,8 +4,12 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Enemy
-  - Glad
+  - 1P
+  - 1P-Floor
+  - 1P-Projectile
+  - 2P
+  - 2P-Floor
+  - 2P-Projectile
   layers:
   - Default
   - TransparentFX
@@ -42,4 +46,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Below Default
+    uniqueID: 3030301101
     locked: 0
