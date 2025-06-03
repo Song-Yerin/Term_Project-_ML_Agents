@@ -11,6 +11,6 @@ public class HealthBarcontrol : MonoBehaviour
     void Update()
     {
         int currentHealth = amI1p ? gameManager.p1HP : gameManager.p2HP;
-        fillImage.fillAmount = (float)currentHealth / (float)maxHealth;
+        fillImage.fillAmount = (float)currentHealth / maxHealth;
     }
 }

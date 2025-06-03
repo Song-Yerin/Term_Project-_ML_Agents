@@ -31,4 +31,15 @@ public class GameManager : MonoBehaviour
         if (against2p) p2HP -= amount / (p2Script.isGuarding ? 5 : 1);
         else p1HP -= amount / (p1Script.isGuarding ? 5 : 1);
     }
+
+    public void FloorHandling(bool against2p, Vector3 fxPos, int damage)
+    {
+        Vector2 fxPos2 = new(fxPos.x, fxPos.z);
+        Vector2 topdownPos;
+        if (against2p)
+            topdownPos = new(p2Obj.transform.position.x, p2Obj.transform.position.z);
+        else
+            topdownPos = new(p1Obj.transform.position.x, p1Obj.transform.position.z);
+        if (Vector2.Distance(topdownPos, fxPos2) <= 3.0f) Damage(against2p, damage);
+    }
 }

@@ -139,17 +139,20 @@ MonoBehaviour:
   gameManager: {fileID: 1977805140}
   amI1p: 1
   moveSpeed: 5
+  dashEffectPrefab: {fileID: 1921079115439858272, guid: 8523b5bece2079d46b96ddac101b7b75, type: 3}
   dodgeDistance: 3
   dodgeDelay: 0.1
-  skillEffectPrefab: {fileID: 6233876723603620953, guid: dd67789caf9bce34691d208067ca72c1, type: 3}
-  effectDelay: 1.7
-  effectOffsetY: 0.1
+  attackDamage: 10
   attackDelay: 0.5
+  skillEffectPrefab: {fileID: 6233876723603620953, guid: dd67789caf9bce34691d208067ca72c1, type: 3}
+  skillDamage: 15
   skillDelay: 1
+  effectDelay: 1.5
+  effectOffsetY: 0.1
   projectilePrefab: {fileID: 1774236141112001820, guid: 4abaeb7aab58de840b5a1e1404ff2137, type: 3}
+  projectileDamage: 15
   projectileSpeed: 30
   projectileDelay: 1.5
-  dashEffectPrefab: {fileID: 1921079115439858272, guid: fa90ff1b61c81b9439abd31efcf6f2ec, type: 3}
   attackSoundClip: {fileID: 8300000, guid: 4dd3709bc57e142658a6b53f15346ce6, type: 3}
   skillSoundClip: {fileID: 8300000, guid: 205be67afd3eb43a18e9e78c60a271f1, type: 3}
   projectileSoundClip: {fileID: 8300000, guid: 4a05b5376c9ef43f4b35987fa28a8038, type: 3}
@@ -303,6 +306,29 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!136 &1097987
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097981}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1 &146622564
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,7 +342,7 @@ GameObject:
   - component: {fileID: 146622566}
   - component: {fileID: 146622568}
   m_Layer: 5
-  m_Name: filled_hp_1p
+  m_Name: filled_hp_2p
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -394,7 +420,7 @@ MonoBehaviour:
   gameManager: {fileID: 1977805140}
   fillImage: {fileID: 146622566}
   maxHealth: 100
-  amI1p: 1
+  amI1p: 0
 --- !u!1 &243199172 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2796492743467506607, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
@@ -514,6 +540,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 65bfa2dcd735b234697546f1a5eb6347, type: 2}
+    - target: {fileID: -3181452503744645242, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: -2796492743467506607, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: -971658082878048829, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.023
@@ -526,18 +560,34 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0.17
       objectReference: {fileID: 0}
+    - target: {fileID: 710183102880238943, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       propertyPath: m_Name
       value: 1p
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       propertyPath: m_TagString
-      value: 2P
+      value: 1P
       objectReference: {fileID: 0}
     - target: {fileID: 3438196526767402093, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 36e25fb83f82555489e8555c9626a501, type: 2}
+    - target: {fileID: 6413430945410268847, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 6666603822528672967, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 7036213049465896255, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -554,6 +604,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1097982}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1097987}
     - targetCorrespondingSourceObject: {fileID: 7036213049465896255, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2084167766}
@@ -767,6 +820,14 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 65bfa2dcd735b234697546f1a5eb6347, type: 2}
+    - target: {fileID: -3181452503744645242, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: -2796492743467506607, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: -971658082878048829, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.023
@@ -778,6 +839,10 @@ PrefabInstance:
     - target: {fileID: -971658082878048829, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 710183102880238943, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       propertyPath: m_Name
@@ -791,6 +856,18 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 36e25fb83f82555489e8555c9626a501, type: 2}
+    - target: {fileID: 6413430945410268847, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 6666603822528672967, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 7036213049465896255, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -807,6 +884,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1980951630}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1980951635}
     - targetCorrespondingSourceObject: {fileID: 7036213049465896255, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 933692637}
@@ -2489,7 +2569,7 @@ GameObject:
   - component: {fileID: 1952063327}
   - component: {fileID: 1952063329}
   m_Layer: 5
-  m_Name: filled_hp_2p
+  m_Name: filled_hp_1p
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2567,7 +2647,7 @@ MonoBehaviour:
   gameManager: {fileID: 1977805140}
   fillImage: {fileID: 1952063327}
   maxHealth: 100
-  amI1p: 0
+  amI1p: 1
 --- !u!1 &1977805139
 GameObject:
   m_ObjectHideFlags: 0
@@ -2599,6 +2679,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   p1HP: 100
   p2HP: 100
+  p1Obj: {fileID: 1097981}
+  p2Obj: {fileID: 1980951627}
 --- !u!4 &1977805141
 Transform:
   m_ObjectHideFlags: 0
@@ -2661,17 +2743,20 @@ MonoBehaviour:
   gameManager: {fileID: 1977805140}
   amI1p: 0
   moveSpeed: 5
+  dashEffectPrefab: {fileID: 1921079115439858272, guid: 8523b5bece2079d46b96ddac101b7b75, type: 3}
   dodgeDistance: 3
   dodgeDelay: 0.1
-  skillEffectPrefab: {fileID: 6233876723603620953, guid: dd67789caf9bce34691d208067ca72c1, type: 3}
-  effectDelay: 1.7
-  effectOffsetY: 0.1
+  attackDamage: 10
   attackDelay: 0.5
+  skillEffectPrefab: {fileID: 6233876723603620953, guid: dd67789caf9bce34691d208067ca72c1, type: 3}
+  skillDamage: 15
   skillDelay: 1
+  effectDelay: 1.5
+  effectOffsetY: 0.1
   projectilePrefab: {fileID: 1774236141112001820, guid: 4abaeb7aab58de840b5a1e1404ff2137, type: 3}
+  projectileDamage: 15
   projectileSpeed: 30
   projectileDelay: 1.5
-  dashEffectPrefab: {fileID: 1921079115439858272, guid: fa90ff1b61c81b9439abd31efcf6f2ec, type: 3}
   attackSoundClip: {fileID: 8300000, guid: 4dd3709bc57e142658a6b53f15346ce6, type: 3}
   skillSoundClip: {fileID: 8300000, guid: 205be67afd3eb43a18e9e78c60a271f1, type: 3}
   projectileSoundClip: {fileID: 8300000, guid: 4a05b5376c9ef43f4b35987fa28a8038, type: 3}
@@ -2798,6 +2883,29 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!136 &1980951635
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1980951627}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1 &2073966115 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2981451829997229230, guid: 0b2ea0e48a91f5243a682c1c632a862d, type: 3}

@@ -152,13 +152,13 @@ public class PlayerMovement : MonoBehaviour
         // 좌우 회피 (Q/E키)
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            StartCoroutine(Dodge(Vector3.left));
+            StartCoroutine(Dodge(Vector3.right));
             CreateDashEffect();  // Q 회피 시 잔상 생성
             StartCoroutine(SetPostDelay(dodgeDelay));
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
-            StartCoroutine(Dodge(Vector3.right));
+            StartCoroutine(Dodge(Vector3.left));
             CreateDashEffect();  // E 회피 시 잔상 생성
             StartCoroutine(SetPostDelay(dodgeDelay));
         }
@@ -170,7 +170,7 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("스킬 시작!");
             audioSource.PlayOneShot(skillSoundClip);
             StartCoroutine(SetPostDelay(skillDelay));
-            StartCoroutine(DelayedSkillEffect());
+            StartCoroutine(DelayedSkillEffect(transform.position));
         }
         else
         {
@@ -209,9 +209,11 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("회피 완료!");
     }
 
-    System.Collections.IEnumerator DelayedSkillEffect()
+    System.Collections.IEnumerator DelayedSkillEffect(Vector3 origin)
     {
         yield return new WaitForSeconds(effectDelay);
+
+        Debug.Log("장판 이펙트 생성");
 
         Vector3 forward = Vector3.right * (amI1p ? -1 : 1);
 
@@ -222,17 +224,20 @@ public class PlayerMovement : MonoBehaviour
         float forwardOffset = 4f;  // 앞으로 나갈 거리
 
         // 위치 계산
-        Vector3 effectPosition = transform.position
+        Vector3 effectPosition = origin
                                 + rotatedDirection * 1.0f
                                 + forward * forwardOffset;
 
-        effectPosition.y = transform.position.y;
+        effectPosition.y = 0;
 
         Quaternion effectRotation = Quaternion.LookRotation(Vector3.right * (amI1p ? -1 : 1), Vector3.up);
 
         audioSource.PlayOneShot(fbx);
 
         Instantiate(skillEffectPrefab, effectPosition, effectRotation);
+
+        yield return new WaitForSeconds(0.2f);
+        gameManager.GetComponent<GameManager>().FloorHandling(amI1p, effectPosition, skillDamage);
     }
 
     System.Collections.IEnumerator SetPostDelay(float duration)
@@ -253,13 +258,16 @@ public class PlayerMovement : MonoBehaviour
 
         // Rigidbody 이동 처리
         Rigidbody rb = proj.GetComponent<Rigidbody>();
+        Projectile script = proj.GetComponent<Projectile>();
         if (rb != null)
         {
             rb.useGravity = false;  // 필요시
-            rb.velocity = Vector3.right * (amI1p ? -1 : 1) * projectileSpeed;  // 앞 방향으로 이동
+            rb.velocity = (amI1p ? -1 : 1) * projectileSpeed * Vector3.right;  // 앞 방향으로 이동
 
-            ProjectileDamage damageScript = proj.AddComponent<ProjectileDamage>();
-            damageScript.damage = 15f;
+            script.ownerIs1p = amI1p;
+            script.damage = projectileDamage;
+            proj.tag = amI1p ? "1P-Projectile" : "2P-Projectile";
+            script.gameManager = gameManager;
         }
         else
         {
