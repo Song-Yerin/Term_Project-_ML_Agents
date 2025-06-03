@@ -9,25 +9,29 @@ public class PlayerMovement : MonoBehaviour
     public bool amI1p = true;
 
     public float moveSpeed = 5f;
+
+    public GameObject dashEffectPrefab;  // 대시 잔상 이펙트 프리팹
     public float dodgeDistance = 3f;
     public float dodgeDelay = 0.1f;
 
-    public GameObject skillEffectPrefab;
     public float effectDelay = 0f;
     public float effectOffsetY = 0.1f;
+
     public float attackDelay = 0.5f;   // 평타 지속 시간
+
+    public GameObject skillEffectPrefab;
     public float skillDelay = 1f;      // 스킬 딜레이이
 
     public GameObject projectilePrefab;  // V키 투사체 프리팹
     public float projectileSpeed = 10f;  // 투사체 속도
     public float projectileDelay = 1.5f;      // 스킬 딜레이이
 
-    public GameObject dashEffectPrefab;  // 대시 잔상 이펙트 프리팹
+
 
     private Rigidbody rb;
     private Animator animator;
     private Vector3 movement;
- 
+
     public AudioClip attackSoundClip;    // (Z) 사운드
     public AudioClip skillSoundClip;     // (C) 사운드
     public AudioClip projectileSoundClip; // (V) 사운드
@@ -58,9 +62,23 @@ public class PlayerMovement : MonoBehaviour
         HandleActions();
     }
 
+    void RangeLimiting() //아레나 밖으로 나가지 않게 위치 조정 (이동할 때 마다 호출출)
+    {
+        Vector2 topdownPos = new(rb.position.x, rb.position.z);
+        float dist = Vector2.Distance(topdownPos, Vector2.zero);
+
+        if (dist > 10f)
+        {
+            topdownPos *= 10f / dist;
+            rb.MovePosition(new Vector3(topdownPos.x, rb.position.y, topdownPos.y));
+            //transform.position = new Vector3(topdownPos.x, transform.position.y, topdownPos.y);
+        }
+    }
+
     void FixedUpdate()
     {
         if (actable && !isGuarding) rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
+        RangeLimiting();
     }
 
     void UpdateAnimation(float h, float v)
@@ -131,13 +149,13 @@ public class PlayerMovement : MonoBehaviour
         // 좌우 회피 (Q/E키)
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            StartCoroutine(Dodge(Vector3.right * (amI1p ? -1 : 1)));
+            StartCoroutine(Dodge(Vector3.left));
             CreateDashEffect();  // Q 회피 시 잔상 생성
             StartCoroutine(SetPostDelay(dodgeDelay));
         }
         else if (Input.GetKeyDown(KeyCode.E))
         {
-            StartCoroutine(Dodge(Vector3.left * (amI1p ? -1 : 1)));
+            StartCoroutine(Dodge(Vector3.right));
             CreateDashEffect();  // E 회피 시 잔상 생성
             StartCoroutine(SetPostDelay(dodgeDelay));
         }
@@ -179,6 +197,7 @@ public class PlayerMovement : MonoBehaviour
         while (elapsed < duration)
         {
             rb.MovePosition(Vector3.Lerp(rb.position, dodgeTarget, elapsed / duration));
+            RangeLimiting();
             elapsed += Time.deltaTime;
             yield return null;
         }
@@ -246,7 +265,7 @@ public class PlayerMovement : MonoBehaviour
 
         audioSource.PlayOneShot(projectile);
 
-    } 
+    }
     void CreateDashEffect()
     {
         Vector3 effectPosition = rb.position + Vector3.up * effectOffsetY;
@@ -263,10 +282,9 @@ public class PlayerMovement : MonoBehaviour
         {
             if (hit.CompareTag(amI1p ? "2P" : "1P"))
             {
-
+                
             }
         }
     }
-
 }
 
