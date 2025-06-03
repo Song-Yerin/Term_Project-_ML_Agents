@@ -14,17 +14,19 @@ public class PlayerMovement : MonoBehaviour
     public float dodgeDistance = 3f;
     public float dodgeDelay = 0.1f;
 
-    public float effectDelay = 0f;
-    public float effectOffsetY = 0.1f;
-
-    public float attackDelay = 0.5f;   // 평타 지속 시간
+    public int attackDamage = 10; // 평타 데미지
+    public float attackDelay = 0.5f; // 평타 후딜레이
 
     public GameObject skillEffectPrefab;
-    public float skillDelay = 1f;      // 스킬 딜레이이
+    public int skillDamage = 15; // 장판 데미지
+    public float skillDelay = 1f; // 장판 후딜레이
+    public float effectDelay = 0f;  // 장판 발동시간?
+    public float effectOffsetY = 0.1f;
 
     public GameObject projectilePrefab;  // V키 투사체 프리팹
+    public int projectileDamage = 15; // 장풍 데미지
     public float projectileSpeed = 10f;  // 투사체 속도
-    public float projectileDelay = 1.5f;      // 스킬 딜레이이
+    public float projectileDelay = 1.5f;      // 장풍 후딜레이
 
 
 
@@ -111,7 +113,7 @@ public class PlayerMovement : MonoBehaviour
     void HandleActions()
     {
         // 가드 (X키)
-        if (Input.GetKey(KeyCode.X))
+        if (Input.GetKey(KeyCode.X) && actable)
         {
             animator.SetBool("isGuarding", true);
             Debug.Log("가드 중!");
@@ -137,6 +139,7 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z))
         {
             animator.SetBool("isAttacking", true);
+            TryDamageEnemy();
             Debug.Log("평타 시작!");
             audioSource.PlayOneShot(attackSoundClip);
             StartCoroutine(SetPostDelay(attackDelay));
@@ -273,17 +276,18 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("대시 잔상 이펙트 생성");
     }
     // 공격 범위 안의 적 찾기 (예시: 평타용)
-    void TryDamageEnemy(float damage)
+    void TryDamageEnemy()
     {
-        float attackRange = 2.0f;
-        Collider[] hits = Physics.OverlapSphere(transform.position + Vector3.right * (amI1p ? -1 : 1), attackRange);
+        float attackRange = 2.5f;
+        Collider[] hits = Physics.OverlapSphere(transform.position + Vector3.right * (amI1p ? -1 : 1) + Vector3.up * 2.0f, attackRange);
 
         foreach (Collider hit in hits)
         {
             if (hit.CompareTag(amI1p ? "2P" : "1P"))
             {
-                
-            }
+                gameManager.GetComponent<GameManager>().Damage(amI1p, attackDamage);
+                break;
+            }  
         }
     }
 }
