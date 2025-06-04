@@ -144,15 +144,16 @@ MonoBehaviour:
   dodgeDelay: 0.1
   attackDamage: 10
   attackDelay: 0.5
+  skillWarningPrefab: {fileID: 6502361737271126136, guid: a436cc0f870df7c45b4ced118790df8a, type: 3}
   skillEffectPrefab: {fileID: 6233876723603620953, guid: dd67789caf9bce34691d208067ca72c1, type: 3}
   skillDamage: 15
-  skillDelay: 1
-  effectDelay: 1.5
-  effectOffsetY: 0.1
+  skillDelay: 0.75
+  effectDelay: 1
+  effectOffsetY: 0.5
   projectilePrefab: {fileID: 1774236141112001820, guid: 4abaeb7aab58de840b5a1e1404ff2137, type: 3}
   projectileDamage: 15
   projectileSpeed: 30
-  projectileDelay: 1.5
+  projectileDelay: 1
   attackSoundClip: {fileID: 8300000, guid: 4dd3709bc57e142658a6b53f15346ce6, type: 3}
   skillSoundClip: {fileID: 8300000, guid: 205be67afd3eb43a18e9e78c60a271f1, type: 3}
   projectileSoundClip: {fileID: 8300000, guid: 4a05b5376c9ef43f4b35987fa28a8038, type: 3}
@@ -161,6 +162,8 @@ MonoBehaviour:
   actable: 1
   isGuarding: 0
   inputFlags: 0
+  floorActivated: 0
+  projectileActivated: 0
 --- !u!82 &1097983
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2768,15 +2771,16 @@ MonoBehaviour:
   dodgeDelay: 0.1
   attackDamage: 10
   attackDelay: 0.5
+  skillWarningPrefab: {fileID: 6502361737271126136, guid: a436cc0f870df7c45b4ced118790df8a, type: 3}
   skillEffectPrefab: {fileID: 6233876723603620953, guid: dd67789caf9bce34691d208067ca72c1, type: 3}
   skillDamage: 15
-  skillDelay: 1
-  effectDelay: 1.5
-  effectOffsetY: 0.1
+  skillDelay: 0.75
+  effectDelay: 1
+  effectOffsetY: 0.5
   projectilePrefab: {fileID: 1774236141112001820, guid: 4abaeb7aab58de840b5a1e1404ff2137, type: 3}
   projectileDamage: 15
   projectileSpeed: 30
-  projectileDelay: 1.5
+  projectileDelay: 1
   attackSoundClip: {fileID: 8300000, guid: 4dd3709bc57e142658a6b53f15346ce6, type: 3}
   skillSoundClip: {fileID: 8300000, guid: 205be67afd3eb43a18e9e78c60a271f1, type: 3}
   projectileSoundClip: {fileID: 8300000, guid: 4a05b5376c9ef43f4b35987fa28a8038, type: 3}
@@ -2785,6 +2789,8 @@ MonoBehaviour:
   actable: 1
   isGuarding: 0
   inputFlags: 0
+  floorActivated: 0
+  projectileActivated: 0
 --- !u!95 &1980951631
 Animator:
   serializedVersion: 7

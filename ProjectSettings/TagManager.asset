@@ -10,6 +10,8 @@ TagManager:
   - 2P
   - 2P-Floor
   - 2P-Projectile
+  - 1P-Warning
+  - 2P-Warning
   layers:
   - Default
   - TransparentFX

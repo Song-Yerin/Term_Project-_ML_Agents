@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEditor.Searcher.SearcherWindow.Alignment;
@@ -17,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     public int attackDamage = 10; // 평타 데미지
     public float attackDelay = 0.5f; // 평타 후딜레이
 
+    public GameObject skillWarningPrefab;
     public GameObject skillEffectPrefab;
     public int skillDamage = 15; // 장판 데미지
     public float skillDelay = 1f; // 장판 후딜레이
@@ -61,6 +63,13 @@ public class PlayerMovement : MonoBehaviour
     ( ( inputFlags >> (여기에 원하는 y값) ) % 2 == 1 ) //이걸로 y값에 해당되는 키가 눌렸는지 확인
     */
     public int inputFlags = 0;
+
+    //각각 장판/장풍 시전했는지를 나타내는 변수
+    //미시전 = 0
+    //방금 시전 = 1
+    //LateUpdate에서 1이라면 2로 올려줌
+    public int floorActivated = 0;
+    public int projectileActivated = 0;
 
     void Start()
     {
@@ -183,31 +192,42 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // 스킬 (C키)
-        if ( ( inputFlags >> 6 ) % 2 == 1 )
+        if ((inputFlags >> 6) % 2 == 1)
         {
             animator.SetBool("isSkill", true);
             Debug.Log("스킬 시작!");
             audioSource.PlayOneShot(skillSoundClip);
+            floorActivated = 1;
+            SkillWarningEffect(transform.position);
             StartCoroutine(SetPostDelay(skillDelay));
             StartCoroutine(DelayedSkillEffect(transform.position));
         }
         else
         {
             animator.SetBool("isSkill", false);
+            floorActivated = 0;
         }
 
         // 투사체 스킬 (V)
-        if ( ( inputFlags >> 7 ) % 2 == 1 )
+        if ((inputFlags >> 7) % 2 == 1)
         {
             animator.SetBool("isSkill2", true);
             audioSource.PlayOneShot(projectileSoundClip);
+            projectileActivated = 1;
             ShootProjectile();
             StartCoroutine(SetPostDelay(projectileDelay));
         }
         else
         {
             animator.SetBool("isSkill2", false);
+            projectileActivated = 0;
         }
+    }
+
+    void LateUpdate()
+    {
+        if (floorActivated == 1) floorActivated++;
+        if (projectileActivated == 1) projectileActivated++;
     }
 
     System.Collections.IEnumerator Dodge(Vector3 direction)
@@ -226,6 +246,30 @@ public class PlayerMovement : MonoBehaviour
 
         rb.MovePosition(dodgeTarget);
         Debug.Log("회피 완료!");
+    }
+
+    void SkillWarningEffect(Vector3 origin)
+    {
+        Vector3 forward = Vector3.right * (amI1p ? -1 : 1);
+
+        // Y축 기준 +90도 회전된 방향
+        Vector3 rotatedDirection = Vector3.up;
+
+        // 추가 이동 거리
+        float forwardOffset = 4f;  // 앞으로 나갈 거리
+
+        // 위치 계산
+        Vector3 effectPosition = origin
+                                + rotatedDirection * 1.0f
+                                + forward * forwardOffset;
+
+        effectPosition.y = effectOffsetY;
+
+        Quaternion effectRotation = Quaternion.LookRotation(Vector3.up, Vector3.up);
+
+        GameObject proj = Instantiate(skillWarningPrefab, effectPosition, effectRotation);
+        proj.tag = amI1p ? "1P-Warning" : "2P-Warning";
+        proj.GetComponent<FloorWarning>().duration = effectDelay;
     }
 
     System.Collections.IEnumerator DelayedSkillEffect(Vector3 origin)
