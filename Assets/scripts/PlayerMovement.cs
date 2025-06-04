@@ -44,6 +44,24 @@ public class PlayerMovement : MonoBehaviour
     public bool actable = true;
     public bool isGuarding = false;
 
+    /*
+    x	y	키
+    1	0	위
+    2	1	아래
+    4	2	왼쪽
+    8	3	오른쪽
+    16	4	공격
+    32	5	가드
+    64	6	장판
+    128	7	장풍
+    256	8	왼쪽 대시
+    512	9	오른쪽 대시
+
+    누른 키에 해당되는 x값을 모두 합친 값이 inputFlags
+    ( ( inputFlags >> (여기에 원하는 y값) ) % 2 == 1 ) //이걸로 y값에 해당되는 키가 눌렸는지 확인
+    */
+    public int inputFlags = 0;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -54,9 +72,10 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void Update()
-    {
-        float v = Input.GetAxisRaw("Vertical") * -1;
-        float h = Input.GetAxisRaw("Horizontal");
+    {    
+        float v = (( ( inputFlags >> 0 ) % 2 == 1 ) ? -1 : 0) + (( ( inputFlags >> 1 ) % 2 == 1 ) ? 1 : 0);
+        float h = (( ( inputFlags >> 3 ) % 2 == 1 ) ? -1 : 0) + (( ( inputFlags >> 2 ) % 2 == 1 ) ? 1 : 0);
+        //(1, 1) = 왼쪽 아래방향
 
         movement = actable && !isGuarding ? new Vector3(h, 0f, v).normalized : Vector3.zero;
 
@@ -113,7 +132,7 @@ public class PlayerMovement : MonoBehaviour
     void HandleActions()
     {
         // 가드 (X키)
-        if (Input.GetKey(KeyCode.X) && actable)
+        if (( ( inputFlags >> 5 ) % 2 == 1 ) && actable)
         {
             animator.SetBool("isGuarding", true);
             Debug.Log("가드 중!");
@@ -136,7 +155,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // 평타 (Z키)
-        if (Input.GetKeyDown(KeyCode.Z))
+        if ( ( inputFlags >> 4 ) % 2 == 1 )
         {
             animator.SetBool("isAttacking", true);
             TryDamageEnemy();
@@ -150,13 +169,13 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // 좌우 회피 (Q/E키)
-        if (Input.GetKeyDown(KeyCode.Q))
+        if ( ( inputFlags >> 8 ) % 2 == 1 )
         {
             StartCoroutine(Dodge(Vector3.right));
             CreateDashEffect();  // Q 회피 시 잔상 생성
             StartCoroutine(SetPostDelay(dodgeDelay));
         }
-        else if (Input.GetKeyDown(KeyCode.E))
+        else if ( ( inputFlags >> 9 ) % 2 == 1 )
         {
             StartCoroutine(Dodge(Vector3.left));
             CreateDashEffect();  // E 회피 시 잔상 생성
@@ -164,7 +183,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // 스킬 (C키)
-        if (Input.GetKeyDown(KeyCode.C))
+        if ( ( inputFlags >> 6 ) % 2 == 1 )
         {
             animator.SetBool("isSkill", true);
             Debug.Log("스킬 시작!");
@@ -178,7 +197,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // 투사체 스킬 (V)
-        if (Input.GetKeyDown(KeyCode.V))
+        if ( ( inputFlags >> 7 ) % 2 == 1 )
         {
             animator.SetBool("isSkill2", true);
             audioSource.PlayOneShot(projectileSoundClip);

@@ -160,6 +160,7 @@ MonoBehaviour:
   projectile: {fileID: 8300000, guid: f9e601c1ae903ef439c5c8060299939d, type: 3}
   actable: 1
   isGuarding: 0
+  inputFlags: 0
 --- !u!82 &1097983
 AudioSource:
   m_ObjectHideFlags: 0
@@ -328,7 +329,20 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 1.5, z: 0}
+  m_Center: {x: 0, y: 1.3, z: 0}
+--- !u!114 &1097989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a20a7f8bbc48ad24bacee8a5f1b54ec2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1097982}
 --- !u!1 &146622564
 GameObject:
   m_ObjectHideFlags: 0
@@ -603,10 +617,13 @@ PrefabInstance:
       addedObject: {fileID: 1097983}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1097982}
+      addedObject: {fileID: 1097987}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1097987}
+      addedObject: {fileID: 1097989}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1097982}
     - targetCorrespondingSourceObject: {fileID: 7036213049465896255, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2084167766}
@@ -883,10 +900,13 @@ PrefabInstance:
       addedObject: {fileID: 1980951633}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1980951630}
+      addedObject: {fileID: 1980951635}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1980951635}
+      addedObject: {fileID: 1980951637}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1980951630}
     - targetCorrespondingSourceObject: {fileID: 7036213049465896255, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 933692637}
@@ -2764,6 +2784,7 @@ MonoBehaviour:
   projectile: {fileID: 8300000, guid: f9e601c1ae903ef439c5c8060299939d, type: 3}
   actable: 1
   isGuarding: 0
+  inputFlags: 0
 --- !u!95 &1980951631
 Animator:
   serializedVersion: 7
@@ -2903,9 +2924,22 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 2
+  m_Height: 2.5
   m_Direction: 1
-  m_Center: {x: 0, y: 1.5, z: 0}
+  m_Center: {x: 0, y: 1.3, z: 0}
+--- !u!114 &1980951637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1980951627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7df0548316ed3e84589f12e41e555416, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1980951630}
 --- !u!1 &2073966115 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2981451829997229230, guid: 0b2ea0e48a91f5243a682c1c632a862d, type: 3}
