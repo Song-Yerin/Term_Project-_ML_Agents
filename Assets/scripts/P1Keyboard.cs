@@ -18,8 +18,8 @@ public class P1Keyboard : MonoBehaviour
         if (Input.GetButton("1P-Guard")) rtnValue += 32;
         if (Input.GetButton("1P-Skill1")) rtnValue += 64;
         if (Input.GetButton("1P-Skill2")) rtnValue += 128;
-        if (Input.GetButton("1P-DashL")) rtnValue += 256;
-        if (Input.GetButton("1P-DashR")) rtnValue += 512;
+        if (Input.GetButtonDown("1P-DashL")) rtnValue += 256;
+        if (Input.GetButtonDown("1P-DashR")) rtnValue += 512;
 
         target.inputFlags = rtnValue;
     }

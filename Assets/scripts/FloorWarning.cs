@@ -37,4 +37,9 @@ public class FloorWarning : MonoBehaviour
         progress += Time.deltaTime;
         DrawCircle();
     }
+
+    public float GetRemainingTime()
+    {
+        return duration - progress;
+    }
 }
