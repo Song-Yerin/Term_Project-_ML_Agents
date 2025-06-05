@@ -28,8 +28,27 @@ public class GameManager : MonoBehaviour
 
     public void Damage(bool against2p, int amount)
     {
-        if (against2p) p2HP -= amount / (p2Script.isGuarding ? 5 : 1);
-        else p1HP -= amount / (p1Script.isGuarding ? 5 : 1);
+        if (against2p)
+        {
+            p2HP -= amount / (p2Script.isGuarding ? 5 : 1);
+            if (p2HP <= 0)
+            {
+                p1Script.Die();
+                p2Script.Die();
+
+            }
+        }
+        else
+        {
+            p1HP -= amount / (p1Script.isGuarding ? 5 : 1);
+            if (p1HP <= 0 )
+            {
+                p1Script.Die();
+                p2Script.Die();
+            }
+        }
+
+
     }
 
     public void FloorHandling(bool against2p, Vector3 fxPos, int damage)

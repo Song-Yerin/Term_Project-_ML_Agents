@@ -1,3 +1,4 @@
+using Unity.MLAgents;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,7 +31,7 @@ public class PlayerMovement : MonoBehaviour
     public float projectileSpeed = 10f;  // 투사체 속도
     public float projectileDelay = 1.5f;      // 장풍 후딜레이
 
-
+    private bool isDead = false;
 
     private Rigidbody rb;
     private Animator animator;
@@ -81,7 +82,9 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void Update()
-    {    
+    {
+        if (isDead) return;
+
         float v = (( ( inputFlags >> 0 ) % 2 == 1 ) ? -1 : 0) + (( ( inputFlags >> 1 ) % 2 == 1 ) ? 1 : 0);
         float h = (( ( inputFlags >> 3 ) % 2 == 1 ) ? -1 : 0) + (( ( inputFlags >> 2 ) % 2 == 1 ) ? 1 : 0);
         //(1, 1) = 왼쪽 아래방향
@@ -107,12 +110,16 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (isDead) return;
+
         if (actable && !isGuarding) rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
         RangeLimiting();
     }
 
     void UpdateAnimation(float h, float v)
     {
+        if (isDead) return;
+
         bool up = false, down = false, left = false, right = false;
 
         if (actable && !isGuarding)
@@ -140,6 +147,8 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleActions()
     {
+        if (isDead) return;
+
         // 가드 (X키)
         if (( ( inputFlags >> 5 ) % 2 == 1 ) && actable)
         {
@@ -226,6 +235,8 @@ public class PlayerMovement : MonoBehaviour
 
     void LateUpdate()
     {
+        if (isDead) return;
+
         if (floorActivated == 1) floorActivated++;
         if (projectileActivated == 1) projectileActivated++;
     }
@@ -360,6 +371,24 @@ public class PlayerMovement : MonoBehaviour
                 break;
             }  
         }
+    }
+
+    public void Die()
+    {
+        isDead = true;
+
+        rb.velocity = Vector3.zero;
+
+        animator.SetBool("Move_Left", false);
+        animator.SetBool("Move_Right", false);
+        animator.SetBool("Move_Up", false);
+        animator.SetBool("Move_Down", false);
+        animator.SetBool("isAttacking", false);
+        animator.SetBool("isGuarding", false);
+        animator.SetBool("isSkill", false);
+        animator.SetBool("isSkill2", false);
+
+        //GetComponent<Agent>().EndEpisode();
     }
 }
 
