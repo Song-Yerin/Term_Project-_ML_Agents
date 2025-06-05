@@ -350,13 +350,16 @@ public class BehaviorTreeAI : MonoBehaviour
         bool ahead = amI1p ? proj.transform.position.x <= target.transform.position.x : proj.transform.position.x >= target.transform.position.x;
         if (Math.Abs(proj.transform.position.z - target.transform.position.z) <= 1 && ahead) // 범위 안
         {
-            if (Vector3.Distance(proj.transform.position, target.transform.position) <= 1.0f)
+            if (Vector3.Distance(proj.transform.position, target.transform.position) <= 1.5f)
             {
                 target.inputFlags = 32;
                 guardTime = 60f;
             }
             else
             {
+                target.inputFlags = 128;
+                return true;
+                /*
                 int yDir = Math.Sign(proj.transform.position.z - target.transform.position.z);
                 evadeDir.y = yDir < 0 ? -1 : 1;
                 evadeTime = 60f;
@@ -365,9 +368,10 @@ public class BehaviorTreeAI : MonoBehaviour
                 if (evadeDir.y == -1) target.inputFlags += 1;
                 if (Vector3.Distance(transform.position, Vector3.zero) >= 9.99f)
                     evadeTime = 0;
+                */
             }
         }
-        else if (ahead)
+        else
         {
             int yDir = Math.Sign(proj.transform.position.z - target.transform.position.z);
             if (ahead)
@@ -375,7 +379,7 @@ public class BehaviorTreeAI : MonoBehaviour
                 for (int i = 0; i < 8; i++)
                     if (directions[i].y == yDir) dirSafety[i] = false;
             }
-            else if (Vector3.Distance(proj.transform.position, target.transform.position) <= 1.0f)
+            else if (Vector3.Distance(proj.transform.position, target.transform.position) <= 1.5f)
             {
                 for (int i = 0; i < 8; i++)
                     if (directions[i].y == yDir && directions[i].x == (amI1p ? 1 : -1)) dirSafety[i] = false;
