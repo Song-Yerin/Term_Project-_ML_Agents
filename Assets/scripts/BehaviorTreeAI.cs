@@ -233,7 +233,7 @@ public class BehaviorTreeAI : MonoBehaviour
             if (moveDir.y == 1) target.inputFlags += 2;
             if (moveDir.y == -1) target.inputFlags += 1;
             if (Vector3.Distance(transform.position, Vector3.zero) >= 9.99f)
-                evadeTime = 0;
+                moveTime = 0;
             return;
         }
 
