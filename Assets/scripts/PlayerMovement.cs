@@ -317,6 +317,7 @@ public class PlayerMovement : MonoBehaviour
     System.Collections.IEnumerator SetPostDelay(float duration)
     {
         actable = false;
+        gameManager.DelayDisplay(amI1p, duration);
         yield return new WaitForSeconds(duration);
         actable = true;
     }
