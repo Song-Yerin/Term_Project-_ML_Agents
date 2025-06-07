@@ -22,8 +22,8 @@ public class P2Agent : Agent
         prevEnemyHP = 100;
 
         // 위치 초기화
-        //myScript.transform.position = new Vector3(5f, 0f, 0f);
-        //enemyScript.transform.position = new Vector3(-5f, 0f, 0f);
+        myScript.transform.position = new Vector3(5f, 0f, 0f);
+        enemyScript.transform.position = new Vector3(-5f, 0f, 0f);
 
         myScript.actable = true;
         enemyScript.actable = true;
