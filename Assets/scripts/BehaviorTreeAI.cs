@@ -117,6 +117,22 @@ public class BehaviorTreeAI : MonoBehaviour
                 break;
             }
         }
+        // 강제 근접 이동 (너무 멀면 우선 접근 시도)
+        float distToOpponent = Vector3.Distance(target.transform.position, opponent.transform.position);
+        if (distToOpponent > 6.5f) // 거리가 멀면
+        {
+            moveDir.x = Math.Sign(opponent.transform.position.x - target.transform.position.x);
+            moveDir.y = Math.Sign(opponent.transform.position.z - target.transform.position.z);
+            moveTime = 1.0f;
+
+            if (moveDir.x == 1) target.inputFlags += 4;
+            if (moveDir.x == -1) target.inputFlags += 8;
+            if (moveDir.y == 1) target.inputFlags += 2;
+            if (moveDir.y == -1) target.inputFlags += 1;
+
+            return; // 강제 이동 후 공격 판단은 나중에
+        }
+
         bool ahead = amI1p ? opponent.transform.position.x <= target.transform.position.x : opponent.transform.position.x >= target.transform.position.x;
         bool hpAdvantage = amI1p ? gameManager.p1HP > gameManager.p2HP : gameManager.p1HP < gameManager.p2HP;
         if (atkRange)

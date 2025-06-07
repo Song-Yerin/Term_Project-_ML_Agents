@@ -2,7 +2,7 @@ using Unity.MLAgents;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Searcher.SearcherWindow.Alignment;
+//using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour
@@ -388,8 +388,14 @@ public class PlayerMovement : MonoBehaviour
         animator.SetBool("isGuarding", false);
         animator.SetBool("isSkill", false);
         animator.SetBool("isSkill2", false);
+    }
 
-        //GetComponent<Agent>().EndEpisode();
+    public void Revive()
+    {
+        isGuarding = false;
+        isDead = false;
+        animator.Play("Fight_Idle"); // 혹은 기본 상태로 전환
+                               // 기타 초기화할 내용 추가
     }
 }
 
