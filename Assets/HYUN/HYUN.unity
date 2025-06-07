@@ -2216,10 +2216,16 @@ PrefabInstance:
       addedObject: {fileID: 1980951637}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1980951638}
+      addedObject: {fileID: 1980951630}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1980951630}
+      addedObject: {fileID: 1980951640}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1980951642}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1980951641}
     - targetCorrespondingSourceObject: {fileID: 7036213049465896255, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 933692637}
@@ -4488,7 +4494,7 @@ MonoBehaviour:
   projectileSoundClip: {fileID: 8300000, guid: 4a05b5376c9ef43f4b35987fa28a8038, type: 3}
   fbx: {fileID: 8300000, guid: 7f6cb4ce6c3fe4b4caeebb0573a0bee6, type: 3}
   projectile: {fileID: 8300000, guid: f9e601c1ae903ef439c5c8060299939d, type: 3}
-  actable: 1
+  actable: 0
   isGuarding: 0
   inputFlags: 0
   floorActivated: 0
@@ -4648,7 +4654,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1980951630}
---- !u!114 &1980951638
+--- !u!114 &1980951640
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4657,14 +4663,62 @@ MonoBehaviour:
   m_GameObject: {fileID: 1980951627}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df64b85b721ed5a45a0c72fbbd6d800d, type: 3}
+  m_Script: {fileID: 11500000, guid: c12fa9d841568486c937e43d6ca3eb33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1980951630}
+  agentParameters:
+    maxStep: 0
+  hasUpgradedFromAgentParameters: 1
+  MaxStep: 0
   gameManager: {fileID: 1977805140}
-  opponent: {fileID: 1097981}
-  rawSkillFactor: 0
-  closeInFactor: 15
+  myScript: {fileID: 1980951630}
+  enemyScript: {fileID: 1097982}
+--- !u!114 &1980951641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1980951627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DecisionPeriod: 5
+  DecisionStep: 0
+  TakeActionsBetweenDecisions: 0
+--- !u!114 &1980951642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1980951627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d1c4e0b1822b495aa52bc52839ecb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BrainParameters:
+    VectorObservationSize: 5
+    NumStackedVectorObservations: 1
+    m_ActionSpec:
+      m_NumContinuousActions: 0
+      BranchSizes: 06000000
+    VectorActionSize: 06000000
+    VectorActionDescriptions: []
+    VectorActionSpaceType: 0
+    hasUpgradedBrainParametersWithActionSpec: 1
+  m_Model: {fileID: 0}
+  m_InferenceDevice: 0
+  m_BehaviorType: 0
+  m_BehaviorName: P2Learning
+  TeamId: 0
+  m_UseChildSensors: 1
+  m_UseChildActuators: 1
+  m_DeterministicInference: 0
+  m_ObservableAttributeHandling: 0
 --- !u!1 &2073966115 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2981451829997229230, guid: 0b2ea0e48a91f5243a682c1c632a862d, type: 3}
