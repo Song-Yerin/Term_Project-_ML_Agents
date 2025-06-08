@@ -9,15 +9,33 @@
                 "auxillary_file_paths": [
                     "results/defensive_agent_v1/P2Agentdef/P2Agentdef-20695.pt"
                 ]
+            },
+            {
+                "steps": 49893,
+                "file_path": "results/defensive_agent_v1/P2Agentdef/P2Agentdef-49893.onnx",
+                "reward": 199.64975833892822,
+                "creation_time": 1749384576.238382,
+                "auxillary_file_paths": [
+                    "results/defensive_agent_v1/P2Agentdef/P2Agentdef-49893.pt"
+                ]
+            },
+            {
+                "steps": 52830,
+                "file_path": "results/defensive_agent_v1/P2Agentdef/P2Agentdef-52830.onnx",
+                "reward": null,
+                "creation_time": 1749384682.202175,
+                "auxillary_file_paths": [
+                    "results/defensive_agent_v1/P2Agentdef/P2Agentdef-52830.pt"
+                ]
             }
         ],
         "final_checkpoint": {
-            "steps": 20695,
+            "steps": 52830,
             "file_path": "results/defensive_agent_v1/P2Agentdef.onnx",
-            "reward": 292.3657976786296,
-            "creation_time": 1749381234.721927,
+            "reward": null,
+            "creation_time": 1749384682.202175,
             "auxillary_file_paths": [
-                "results/defensive_agent_v1/P2Agentdef/P2Agentdef-20695.pt"
+                "results/defensive_agent_v1/P2Agentdef/P2Agentdef-52830.pt"
             ]
         }
     },

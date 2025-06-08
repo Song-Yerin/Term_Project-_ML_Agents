@@ -122,4 +122,5 @@ public class P2Agent : Agent
         var discreteActions = actionsOut.DiscreteActions;
         discreteActions[0] = 0;  // 예: 아무 행동 안 함
     }
+    
 }

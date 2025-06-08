@@ -78,7 +78,9 @@ public class P2Agentdef : Agent
         bool triedSkill = (a == 4 || a == 5);
         bool skillReady = cdRemain[a] <= 0f;
         bool skillIssued = false;
-
+        int totalGames =0;
+        int p2Wins =0;
+        int p1Wins =0;
         /* 행동 매핑 (쿨 중이면 무시) */
         switch (a)
         {
@@ -107,18 +109,18 @@ public class P2Agentdef : Agent
         int enemyLoss = prevEnemyHP - enemyHP;
         float r = 0f;
 
-        r += enemyLoss * 0.1f - myLoss * 0.5f;  // 공격보다 방어 중시
+        r += enemyLoss * 0.4f - myLoss * 2.0f;  // 공격보다 방어 중시
         
         //거리둘때 보상
         float d = Vector3.Distance(myScript.transform.position, enemyScript.transform.position);
         r += Mathf.Clamp01((d - 1.5f) / 2f) * 0.6f;
 
-        //가드 성공보상
+        //가드 성공보상
         if (myScript.isGuarding && IsEnemyAttacking()) r += 0.4f;
 
         // 체력차이에 따른 보상
         float healthAdvantage = (myHP - enemyHP) / 100f;
-        r += healthAdvantage * 0.05f;
+        r += healthAdvantage * 0.1f;
         
         r += counterReward; //카운터 보상
 
@@ -126,14 +128,35 @@ public class P2Agentdef : Agent
         if (triedSkill && enemyLoss == 0) r -= 0.3f;
         r -= 0.001f;
 
-        if (enemyHP <= 0) r += 5f;
+        if (enemyHP <= 0) 
+        {
+            totalGames++;
+            p2Wins++;
+            r += 10f;
+        }
+        if (myHP <= 0) 
+        {
+            totalGames++;   
+            p1Wins++;
+            r -= 5.0f; // 패배 패널티 추가
+        }
 
         AddReward(r);
 
         prevMyHP = myHP;
         prevEnemyHP = enemyHP;
 
-        if (myHP <= 0 || enemyHP <= 0) EndEpisode();
+        if (myHP <= 0 || enemyHP <= 0) 
+        {
+            if (totalGames % 10 == 0)
+            {
+                float p2WinRate = (float)p2Wins / totalGames * 100f;
+                float p1WinRate = (float)p1Wins / totalGames * 100f;
+                Debug.Log($"P2(수비): {p2Wins}승 ({p2WinRate:F1}%)");
+                Debug.Log($"P1(공격): {p1Wins}승 ({p1WinRate:F1}%)");
+            }
+            EndEpisode();
+        }
     }
 
     private float CalculateCounterAttackReward(int myAction)
@@ -148,7 +171,7 @@ public class P2Agentdef : Agent
         if (timeSinceEnemyAction <= counterWindowTime && 
             (enemyWasAttacking || enemyWasSkilling))
         {
-            reward += 0.8f;  // 큰 카운터 보상
+            reward += 2f;  // 큰 카운터 보상
             Debug.Log("Perfect Counter Attack!");
         }
         
@@ -162,7 +185,7 @@ public class P2Agentdef : Agent
         // 3. 적이 스킬 시전 중일 때 방해
         if (IsEnemySkilling())
         {
-            reward += 0.6f;
+            reward += 1.0f;
             Debug.Log("Skill Interrupt!");
         }
         

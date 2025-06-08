@@ -7,22 +7,58 @@
     "P2Agentdef": {
         "checkpoints": [
             {
-                "steps": 0,
-                "file_path": "results/p2_rl/P2Agentdef/P2Agentdef-0.onnx",
-                "reward": null,
-                "creation_time": 1749380903.599744,
+                "steps": 349949,
+                "file_path": "results/p2_rl/P2Agentdef/P2Agentdef-349949.onnx",
+                "reward": 242.06515066964286,
+                "creation_time": 1749403240.58883,
                 "auxillary_file_paths": [
-                    "results/p2_rl/P2Agentdef/P2Agentdef-0.pt"
+                    "results/p2_rl/P2Agentdef/P2Agentdef-349949.pt"
+                ]
+            },
+            {
+                "steps": 399779,
+                "file_path": "results/p2_rl/P2Agentdef/P2Agentdef-399779.onnx",
+                "reward": 248.36227416992188,
+                "creation_time": 1749404055.296583,
+                "auxillary_file_paths": [
+                    "results/p2_rl/P2Agentdef/P2Agentdef-399779.pt"
+                ]
+            },
+            {
+                "steps": 449995,
+                "file_path": "results/p2_rl/P2Agentdef/P2Agentdef-449995.onnx",
+                "reward": 235.9146873474121,
+                "creation_time": 1749404896.634505,
+                "auxillary_file_paths": [
+                    "results/p2_rl/P2Agentdef/P2Agentdef-449995.pt"
+                ]
+            },
+            {
+                "steps": 499979,
+                "file_path": "results/p2_rl/P2Agentdef/P2Agentdef-499979.onnx",
+                "reward": 203.60063956765566,
+                "creation_time": 1749405773.569107,
+                "auxillary_file_paths": [
+                    "results/p2_rl/P2Agentdef/P2Agentdef-499979.pt"
+                ]
+            },
+            {
+                "steps": 543872,
+                "file_path": "results/p2_rl/P2Agentdef/P2Agentdef-543872.onnx",
+                "reward": 226.78660649838656,
+                "creation_time": 1749406539.906655,
+                "auxillary_file_paths": [
+                    "results/p2_rl/P2Agentdef/P2Agentdef-543872.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 0,
+            "steps": 543872,
             "file_path": "results/p2_rl/P2Agentdef.onnx",
-            "reward": null,
-            "creation_time": 1749380903.599744,
+            "reward": 226.78660649838656,
+            "creation_time": 1749406539.906655,
             "auxillary_file_paths": [
-                "results/p2_rl/P2Agentdef/P2Agentdef-0.pt"
+                "results/p2_rl/P2Agentdef/P2Agentdef-543872.pt"
             ]
         }
     }
