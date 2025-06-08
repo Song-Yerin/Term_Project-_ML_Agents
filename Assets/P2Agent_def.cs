@@ -22,8 +22,6 @@ public class P2Agentdef : Agent
         private bool enemyWasSkilling = false;
         private float enemyActionEndTime = 0f;
         private float counterWindowTime = 0.5f;
-        private bool myLastActionWasAttack = false;
-        private float myLastAttackTime = 0f;
 
         public override void OnEpisodeBegin()
         {
@@ -40,8 +38,6 @@ public class P2Agentdef : Agent
             enemyWasAttacking = false;
             enemyWasSkilling = false;
             enemyActionEndTime = 0f;
-            myLastActionWasAttack = false;
-            myLastAttackTime = 0f;
         
             prevMyHP = prevEnemyHP = 100;
             for (int i = 0; i < 8; i++) cdRemain[i] = 0f;
@@ -113,16 +109,24 @@ public class P2Agentdef : Agent
 
         r += enemyLoss * 0.1f - myLoss * 0.5f;  // 공격보다 방어 중시
         
+        //거리둘때 보상
         float d = Vector3.Distance(myScript.transform.position, enemyScript.transform.position);
-        r = Mathf.Clamp01((d - 1.5f) / 2f) * 0.6f; //거리둘때 보상
+        r += Mathf.Clamp01((d - 1.5f) / 2f) * 0.6f;
 
-        if (myScript.isGuarding && IsEnemyAttacking()) r += 0.4f; //공격받을때 가드사용시 보상
+        //가드 성공보상
+        if (myScript.isGuarding && IsEnemyAttacking()) r += 0.4f;
+
+        // 체력차이에 따른 보상
+        float healthAdvantage = (myHP - enemyHP) / 100f;
+        r += healthAdvantage * 0.05f;
         
         r += counterReward; //카운터 보상
 
         if (triedSkill && !skillReady) r -= 0.2f;
         if (triedSkill && enemyLoss == 0) r -= 0.3f;
         r -= 0.001f;
+
+        if (enemyHP <= 0) r += 5f;
 
         AddReward(r);
 
@@ -139,7 +143,7 @@ public class P2Agentdef : Agent
         
         if (!isMyAttack) return 0f;  // 공격이 아니면 카운터 불가
 
-        // 1. 적이 방금 공격을 끝낸 직후 내가 공격 (클래식 카운터)
+        // 1. 적의 공격직후 반격 (클래식 카운터)
         float timeSinceEnemyAction = Time.time - enemyActionEndTime;
         if (timeSinceEnemyAction <= counterWindowTime && 
             (enemyWasAttacking || enemyWasSkilling))
@@ -203,14 +207,9 @@ public class P2Agentdef : Agent
         return enemyScript.floorActivated > 0 || enemyScript.projectileActivated > 0;
     }
     
-    private bool IsEnemyGuarding()
+    public override void Heuristic(in ActionBuffers actionsOut)
     {
-        return enemyScript.isGuarding;
+        var discreteActions = actionsOut.DiscreteActions;
+        discreteActions[0] = 0;  // 기본: 아무 행동 안 함
     }
-    
-    private bool WasEnemyGuarding()
-    {
-        return false;  
-    }
-
 }

@@ -1,0 +1,29 @@
+{
+    "P2Agentdef": {
+        "checkpoints": [
+            {
+                "steps": 20695,
+                "file_path": "results/defensive_agent_v1/P2Agentdef/P2Agentdef-20695.onnx",
+                "reward": 292.3657976786296,
+                "creation_time": 1749381234.721927,
+                "auxillary_file_paths": [
+                    "results/defensive_agent_v1/P2Agentdef/P2Agentdef-20695.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 20695,
+            "file_path": "results/defensive_agent_v1/P2Agentdef.onnx",
+            "reward": 292.3657976786296,
+            "creation_time": 1749381234.721927,
+            "auxillary_file_paths": [
+                "results/defensive_agent_v1/P2Agentdef/P2Agentdef-20695.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.2.2"
+    }
+}

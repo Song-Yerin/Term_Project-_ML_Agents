@@ -489,43 +489,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 5
+    VectorObservationSize: 12
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
-      BranchSizes: 06000000
-    VectorActionSize: 06000000
+      BranchSizes: 08000000
+    VectorActionSize: 08000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
-  m_BehaviorName: P2Learning
+  m_BehaviorName: P2Agentdef
   TeamId: 0
   m_UseChildSensors: 1
   m_UseChildActuators: 1
   m_DeterministicInference: 0
   m_ObservableAttributeHandling: 0
---- !u!114 &155288596
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 404578720}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c12fa9d841568486c937e43d6ca3eb33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  MaxStep: 0
-  gameManager: {fileID: 438625150}
-  myScript: {fileID: 155288597}
-  enemyScript: {fileID: 1071743379}
 --- !u!114 &155288597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1440,9 +1421,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 155288597}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 155288596}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9a1fe8c5cc9c8dd43bb2838ffaf03a0e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 155288595}
