@@ -6,16 +6,16 @@ using UnityEngine;
 public class P2Agent : Agent
 {
     public GameManager gameManager;
-    public PlayerMovement myScript;     // 2P
-    public PlayerMovement enemyScript;  // 1P
+    public PlayerMovement myScript;
+    public PlayerMovement enemyScript;
 
     private int prevMyHP;
     private int prevEnemyHP;
 
-    readonly float[] cdTime = { 0, 0, 0, 0.2f, 2f, 2f, 1f, 1f }; // index=action
+    readonly float[] cdTime = { 0, 0, 0, 0.2f, 2f, 2f, 1f, 1f };
     float[] cdRemain = new float[8];
 
-
+    public bool isP2 = false;
 
     public override void OnEpisodeBegin()
     {
@@ -29,37 +29,38 @@ public class P2Agent : Agent
         gm.p1Obj.GetComponent<PlayerMovement>().Revive();
         gm.p2Obj.GetComponent<PlayerMovement>().Revive();
 
-        prevMyHP = prevEnemyHP = 100;
+        // prevHP 초기화 (분기 적용)
+        prevMyHP = isP2 ? gm.p2HP : gm.p1HP;
+        prevEnemyHP = isP2 ? gm.p1HP : gm.p2HP;
+
         for (int i = 0; i < 8; i++) cdRemain[i] = 0f;
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        /* 1) 상대 위치 : Vector2 대신 각각의 축을 따로 넣기 */
         Vector3 rel = enemyScript.transform.position - myScript.transform.position;
-        sensor.AddObservation(rel.x / 10f);   // X
-        sensor.AddObservation(rel.z / 10f);   // Z
+        sensor.AddObservation(rel.x / 10f);
+        sensor.AddObservation(rel.z / 10f);
 
-        /* 2) 체력 */
-        sensor.AddObservation(gameManager.p2HP / 100f);  // 내 HP
-        sensor.AddObservation(gameManager.p1HP / 100f);  // 적 HP
+        // isP2에 따른 체력 관측
+        float myHP = isP2 ? gameManager.p2HP : gameManager.p1HP;
+        float enemyHP = isP2 ? gameManager.p1HP : gameManager.p2HP;
 
-        /* 3) 거리 */
+        sensor.AddObservation(myHP / 100f);
+        sensor.AddObservation(enemyHP / 100f);
+
         float dist = Vector3.Distance(myScript.transform.position, enemyScript.transform.position) / 10f;
         sensor.AddObservation(dist);
 
-        /* 4) 정면 여부 (Dot) */
         Vector3 dir = (enemyScript.transform.position - myScript.transform.position).normalized;
-        sensor.AddObservation(Vector3.Dot(myScript.transform.forward, dir)); // -1 ~ 1
+        sensor.AddObservation(Vector3.Dot(myScript.transform.forward, dir));
 
-        /* 5) 스킬 쿨타임 비율 (Clamp01로 안전하게) */
-        sensor.AddObservation(Mathf.Clamp01(cdRemain[4] / cdTime[4]));  // 장판
-        sensor.AddObservation(Mathf.Clamp01(cdRemain[5] / cdTime[5]));  // 장풍
+        sensor.AddObservation(Mathf.Clamp01(cdRemain[4] / cdTime[4]));
+        sensor.AddObservation(Mathf.Clamp01(cdRemain[5] / cdTime[5]));
     }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
-        /* 쿨타임 감소 */
         for (int i = 0; i < 8; i++) if (cdRemain[i] > 0) cdRemain[i] -= Time.deltaTime;
 
         int a = actions.DiscreteActions[0];
@@ -69,7 +70,6 @@ public class P2Agent : Agent
         bool skillReady = cdRemain[a] <= 0f;
         bool skillIssued = false;
 
-        /* 행동 매핑 (쿨 중이면 무시) */
         switch (a)
         {
             case 1: myScript.inputFlags = 4; break;
@@ -88,9 +88,8 @@ public class P2Agent : Agent
             case 7: myScript.inputFlags = 512; break;
         }
 
-        /* ─ 보상 계산 ─ */
-        int myHP = gameManager.p2HP;
-        int enemyHP = gameManager.p1HP;
+        int myHP = isP2 ? gameManager.p2HP : gameManager.p1HP;
+        int enemyHP = isP2 ? gameManager.p1HP : gameManager.p2HP;
         int myLoss = prevMyHP - myHP;
         int enemyLoss = prevEnemyHP - enemyHP;
 
@@ -103,10 +102,10 @@ public class P2Agent : Agent
         Vector3 dir = (enemyScript.transform.position - myScript.transform.position).normalized;
         r += Mathf.Max(0, Vector3.Dot(myScript.transform.forward, dir)) * 0.3f;
 
-        if (triedSkill && !skillReady) r -= 0.3f;      // 쿨인데 또 눌렀다
-        if (triedSkill && enemyLoss == 0) r -= 0.4f;      // 허공 스킬
+        if (triedSkill && !skillReady) r -= 0.3f;
+        if (triedSkill && enemyLoss == 0) r -= 0.4f;
+        r -= 0.001f;
 
-        r -= 0.001f;                                    // 시간 패널티
         if (enemyHP <= 0) r += 5f;
 
         AddReward(r);
@@ -120,6 +119,6 @@ public class P2Agent : Agent
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         var discreteActions = actionsOut.DiscreteActions;
-        discreteActions[0] = 0;  // 예: 아무 행동 안 함
+        discreteActions[0] = 0;
     }
 }

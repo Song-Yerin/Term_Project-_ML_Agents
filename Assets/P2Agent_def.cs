@@ -3,73 +3,73 @@ using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
 using UnityEngine;
 
-//수비 보상함수
 public class P2Agentdef : Agent
 {
-    
-        public GameManager gameManager;
-        public PlayerMovement myScript;     // 2P
-        public PlayerMovement enemyScript;  // 1P
-    
-        private int prevMyHP;
-        private int prevEnemyHP;
-    
-        readonly float[] cdTime = { 0, 0, 0, 0.2f, 2f, 2f, 1f, 1f }; // index=action
-        float[] cdRemain = new float[8];
+    public GameManager gameManager;
+    public PlayerMovement myScript;     // 자신
+    public PlayerMovement enemyScript;  // 상대
 
-        //카운터어택 변수들
-        private bool enemyWasAttacking = false;
-        private bool enemyWasSkilling = false;
-        private float enemyActionEndTime = 0f;
-        private float counterWindowTime = 0.5f;
+    private int prevMyHP;
+    private int prevEnemyHP;
 
-        public override void OnEpisodeBegin()
-        {
-            GameManager gm = FindAnyObjectByType<GameManager>();
-            gm.p1HP = 100;
-            gm.p2HP = 100;
-            gm.p1Obj.transform.position = new Vector3(2, 0, 0);
-            gm.p2Obj.transform.position = new Vector3(-2, 0, 0);
-            gm.p1WinText.SetActive(false);
-            gm.p2WinText.SetActive(false);
-            gm.p1Obj.GetComponent<PlayerMovement>().Revive();
-            gm.p2Obj.GetComponent<PlayerMovement>().Revive();
+    public bool isP2 = true; // P2인지 여부
 
-            enemyWasAttacking = false;
-            enemyWasSkilling = false;
-            enemyActionEndTime = 0f;
-        
-            prevMyHP = prevEnemyHP = 100;
-            for (int i = 0; i < 8; i++) cdRemain[i] = 0f;
-        }
+    readonly float[] cdTime = { 0, 0, 0, 0.2f, 2f, 2f, 1f, 1f };
+    float[] cdRemain = new float[8];
 
-        public override void CollectObservations(VectorSensor sensor)
-        {
-            /* 1) 상대 위치 : Vector2 대신 각각의 축을 따로 넣기 */
-            Vector3 rel = enemyScript.transform.position - myScript.transform.position;
-            sensor.AddObservation(rel.x / 10f);   // X
-            sensor.AddObservation(rel.z / 10f);   // Z
-    
-            /* 2) 체력 */
-            sensor.AddObservation(gameManager.p2HP / 100f);  // 내 HP
-            sensor.AddObservation(gameManager.p1HP / 100f);  // 적 HP
-    
-            /* 3) 거리 */
-            float dist = Vector3.Distance(myScript.transform.position, enemyScript.transform.position) / 10f;
-            sensor.AddObservation(dist);
-    
-            /* 4) 정면 여부 (Dot) */
-            Vector3 dir = (enemyScript.transform.position - myScript.transform.position).normalized;
-            sensor.AddObservation(Vector3.Dot(myScript.transform.forward, dir)); // -1 ~ 1
-    
-            /* 5) 스킬 쿨타임 비율 (Clamp01로 안전하게) */
-            sensor.AddObservation(Mathf.Clamp01(cdRemain[4] / cdTime[4]));  // 장판
-            sensor.AddObservation(Mathf.Clamp01(cdRemain[5] / cdTime[5]));  // 장풍
-        }
+    private bool enemyWasAttacking = false;
+    private bool enemyWasSkilling = false;
+    private float enemyActionEndTime = 0f;
+    private float counterWindowTime = 0.5f;
+
+    public override void OnEpisodeBegin()
+    {
+        GameManager gm = FindAnyObjectByType<GameManager>();
+        gm.p1HP = 100;
+        gm.p2HP = 100;
+        gm.p1Obj.transform.position = new Vector3(2, 0, 0);
+        gm.p2Obj.transform.position = new Vector3(-2, 0, 0);
+        gm.p1WinText.SetActive(false);
+        gm.p2WinText.SetActive(false);
+        gm.p1Obj.GetComponent<PlayerMovement>().Revive();
+        gm.p2Obj.GetComponent<PlayerMovement>().Revive();
+
+        enemyWasAttacking = false;
+        enemyWasSkilling = false;
+        enemyActionEndTime = 0f;
+
+        // isP2 여부에 따라 prevHP 초기화
+        prevMyHP = isP2 ? gm.p2HP : gm.p1HP;
+        prevEnemyHP = isP2 ? gm.p1HP : gm.p2HP;
+
+        for (int i = 0; i < 8; i++) cdRemain[i] = 0f;
+    }
+
+    public override void CollectObservations(VectorSensor sensor)
+    {
+        Vector3 rel = enemyScript.transform.position - myScript.transform.position;
+        sensor.AddObservation(rel.x / 10f);   // X
+        sensor.AddObservation(rel.z / 10f);   // Z
+
+        // isP2 여부에 따라 체력 관측
+        float myHP = isP2 ? gameManager.p2HP : gameManager.p1HP;
+        float enemyHP = isP2 ? gameManager.p1HP : gameManager.p2HP;
+
+        sensor.AddObservation(myHP / 100f);
+        sensor.AddObservation(enemyHP / 100f);
+
+        float dist = Vector3.Distance(myScript.transform.position, enemyScript.transform.position) / 10f;
+        sensor.AddObservation(dist);
+
+        Vector3 dir = (enemyScript.transform.position - myScript.transform.position).normalized;
+        sensor.AddObservation(Vector3.Dot(myScript.transform.forward, dir)); // -1 ~ 1
+
+        sensor.AddObservation(Mathf.Clamp01(cdRemain[4] / cdTime[4]));
+        sensor.AddObservation(Mathf.Clamp01(cdRemain[5] / cdTime[5]));
+    }
 
     public override void OnActionReceived(ActionBuffers actions)
     {
-        /* 쿨타임 감소 */
         for (int i = 0; i < 8; i++) if (cdRemain[i] > 0) cdRemain[i] -= Time.deltaTime;
 
         int a = actions.DiscreteActions[0];
@@ -79,7 +79,6 @@ public class P2Agentdef : Agent
         bool skillReady = cdRemain[a] <= 0f;
         bool skillIssued = false;
 
-        /* 행동 매핑 (쿨 중이면 무시) */
         switch (a)
         {
             case 1: myScript.inputFlags = 4; break;
@@ -98,29 +97,26 @@ public class P2Agentdef : Agent
             case 7: myScript.inputFlags = 512; break;
         }
 
-        float counterReward = CalculateCounterAttackReward(a); //case에 따라 카운터 보상 계산
+        float counterReward = CalculateCounterAttackReward(a);
         CheckEnemyActionState();
-        
-        int myHP = gameManager.p2HP;
-        int enemyHP = gameManager.p1HP;
+
+        int myHP = isP2 ? gameManager.p2HP : gameManager.p1HP;
+        int enemyHP = isP2 ? gameManager.p1HP : gameManager.p2HP;
         int myLoss = prevMyHP - myHP;
         int enemyLoss = prevEnemyHP - enemyHP;
-        float r = 0f;
 
-        r += enemyLoss * 0.1f - myLoss * 0.5f;  // 공격보다 방어 중시
-        
-        //거리둘때 보상
+        float r = 0f;
+        r += enemyLoss * 0.1f - myLoss * 0.5f;
+
         float d = Vector3.Distance(myScript.transform.position, enemyScript.transform.position);
         r += Mathf.Clamp01((d - 1.5f) / 2f) * 0.6f;
 
-        //가드 성공보상
         if (myScript.isGuarding && IsEnemyAttacking()) r += 0.4f;
 
-        // 체력차이에 따른 보상
         float healthAdvantage = (myHP - enemyHP) / 100f;
         r += healthAdvantage * 0.05f;
-        
-        r += counterReward; //카운터 보상
+
+        r += counterReward;
 
         if (triedSkill && !skillReady) r -= 0.2f;
         if (triedSkill && enemyLoss == 0) r -= 0.3f;
@@ -140,39 +136,30 @@ public class P2Agentdef : Agent
     {
         float reward = 0f;
         bool isMyAttack = (myAction == 3 || myAction == 4 || myAction == 5);
-        
-        if (!isMyAttack) return 0f;  // 공격이 아니면 카운터 불가
+        if (!isMyAttack) return 0f;
 
-        // 1. 적의 공격직후 반격 (클래식 카운터)
         float timeSinceEnemyAction = Time.time - enemyActionEndTime;
-        if (timeSinceEnemyAction <= counterWindowTime && 
-            (enemyWasAttacking || enemyWasSkilling))
+        if (timeSinceEnemyAction <= counterWindowTime && (enemyWasAttacking || enemyWasSkilling))
         {
-            reward += 0.8f;  // 큰 카운터 보상
+            reward += 0.8f;
             Debug.Log("Perfect Counter Attack!");
         }
-        
-        // 2. 적이 현재 공격 모션 중일 때 내가 더 빠른 공격
-        if (IsEnemyAttacking() && myAction == 3)  // 평타는 빠름
+
+        if (IsEnemyAttacking() && myAction == 3)
         {
             reward += 0.5f;
             Debug.Log("Interrupt Counter!");
         }
-        
-        // 3. 적이 스킬 시전 중일 때 방해
+
         if (IsEnemySkilling())
         {
             reward += 0.6f;
             Debug.Log("Skill Interrupt!");
         }
-        
-        // 4. 거리별 카운터 보너스
+
         float distance = Vector3.Distance(myScript.transform.position, enemyScript.transform.position);
-        if (reward > 0 && distance <= 3f)  // 근거리 카운터
-        {
-            reward += 0.2f;
-        }
-        
+        if (reward > 0 && distance <= 3f) reward += 0.2f;
+
         return reward;
     }
 
@@ -180,36 +167,27 @@ public class P2Agentdef : Agent
     {
         bool currentlyAttacking = IsEnemyAttacking();
         bool currentlySkilling = IsEnemySkilling();
-        
-        // 적이 공격을 끝냈을 때 타이밍 기록
-        if (enemyWasAttacking && !currentlyAttacking)
-        {
-            enemyActionEndTime = Time.time;
-        }
-        if (enemyWasSkilling && !currentlySkilling)
-        {
-            enemyActionEndTime = Time.time;
-        }
-        
-        // 상태 업데이트
+
+        if (enemyWasAttacking && !currentlyAttacking) enemyActionEndTime = Time.time;
+        if (enemyWasSkilling && !currentlySkilling) enemyActionEndTime = Time.time;
+
         enemyWasAttacking = currentlyAttacking;
         enemyWasSkilling = currentlySkilling;
     }
 
     private bool IsEnemyAttacking()
     {
-        return !enemyScript.actable && 
-               (enemyScript.floorActivated == 0 && enemyScript.projectileActivated == 0);
+        return !enemyScript.actable && (enemyScript.floorActivated == 0 && enemyScript.projectileActivated == 0);
     }
-    
+
     private bool IsEnemySkilling()
     {
         return enemyScript.floorActivated > 0 || enemyScript.projectileActivated > 0;
     }
-    
+
     public override void Heuristic(in ActionBuffers actionsOut)
     {
         var discreteActions = actionsOut.DiscreteActions;
-        discreteActions[0] = 0;  // 기본: 아무 행동 안 함
+        discreteActions[0] = 0;
     }
 }
