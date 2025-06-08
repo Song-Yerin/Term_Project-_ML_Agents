@@ -162,7 +162,7 @@ public class P2Agentdef : Agent
             Debug.Log("Skill Interrupt!");
         }
         
-        // 5. 거리별 카운터 보너스
+        // 4. 거리별 카운터 보너스
         float distance = Vector3.Distance(myScript.transform.position, enemyScript.transform.position);
         if (reward > 0 && distance <= 3f)  // 근거리 카운터
         {
@@ -210,9 +210,7 @@ public class P2Agentdef : Agent
     
     private bool WasEnemyGuarding()
     {
-        // 이전 프레임 가드 상태를 추적하려면 추가 변수 필요
-        // 구현을 단순화하여 현재 가드 상태만 확인
-        return false;  // 필요시 이전 상태 추적 로직 추가
+        return false;  
     }
 
 }
